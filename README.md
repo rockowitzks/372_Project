@@ -6,5 +6,5 @@ This is the repository for ECE 372 Project
   <li>Button to turn device on / off
   <li>motion detector
   <li>IR emitter and sensor
-  <li>
+  <li>buzzer to alert of intruder
 </ul>
