@@ -5,3 +5,11 @@ void initLED(){
     DDRA |= (1<<DDA1);
     
 }
+
+void lightLED(){
+    PORTA |= (1<<PORTA1);
+}
+
+void turnOffLED(){
+    PORTA &= ~(1<<PORTA1);
+}
