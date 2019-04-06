@@ -3,6 +3,6 @@
 
 #include <avr/io.h>
 
-
+void initPIR();
 
 #endif
