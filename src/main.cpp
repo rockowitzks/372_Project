@@ -88,9 +88,14 @@ int main(void){
             } else {
                 turnOffLED();
               }
+              // buzzer activation
+              /* 
+              changeDutyCylce(5, true);
+              */
           } else {
             // turn everything off
             turnOffLED();
+            //changeDutyCycle(0, false);
           }
           state = waitRelease;
           break;
