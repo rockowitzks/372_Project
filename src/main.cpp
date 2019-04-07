@@ -1,26 +1,32 @@
 
 #include <Arduino.h>
+#include "adxl345.h"
 #include "led.h"
 #include "pir.h"
 #include "timer.h"
 
+#define thresh 300
 
 int main(void){
   Serial.begin(9600);
-  initLED();
-  initPIR();
-  initTimer1();
+  initLED(); //for testing
+  initPIR(); //motion sensor
+  initTimer1(); //for testing
+  initADXL345(); //accelerometer
   while(1){
     //testing PIR detector
-    bool motion = detectMotion();
-    //Serial.println(motion);
-    if(motion){
+    //bool motion = detectMotion();
+    int z = getZ();
+    
+    bool tooFar = (abs(z) > thresh);
+    while(tooFar){ // took out motion here, but will need later
       lightLED();
+      delayMs(100);
     }
-    else{
-      turnOffLED();
-    }
-    delayMs(500);
+    
+    turnOffLED();
+    
+    delayMs(100);
   }
-  
+  return 0;
 }
