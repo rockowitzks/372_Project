@@ -45,13 +45,13 @@ int main(void){
        motion = detectMotion();
        Serial.println(motion);
        Serial.flush();
+       
         switch(state) {
           case waitPress:
           delayMs(250);
           break;
 
           case debouncePress:
-          
           delayMs(250);
           break;
 
