@@ -38,7 +38,6 @@ int main(void){
 
     delayMs(500);
   }
-
    */
 
     while(1) {
@@ -81,11 +80,15 @@ int main(void){
           case debouncePress:
           deviceOn = !deviceOn;
               if(deviceOn) {
+                // operate normally
                 if(motion){
                 lightLED();
             } else {
                 turnOffLED();
               }
+          } else {
+            // turn everything off
+            turnOffLED();
           }
           state = waitRelease;
           break;
