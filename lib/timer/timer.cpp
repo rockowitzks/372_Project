@@ -6,7 +6,7 @@ void initTimer1(){
     TCCR1A &= ~(1 << WGM10);
     TCCR1A &= ~(1 << WGM11);
     TCCR1B |= (1 << WGM12);
-    TCCR1B &= ~(1<<WGM13);
+    TCCR1B &= ~(1 << WGM13);
 
     //sets prescaler to 8
     TCCR1B |= (1 << CS11);
