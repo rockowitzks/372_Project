@@ -5,14 +5,15 @@
 #include "pir.h"
 
 
- /* typedef enum {
+ typedef enum {
   waitPress, debouncePress, waitRelease, debounceRelease
 } states;
 volatile states state = waitPress;
 volatile bool deviceOn = true;
-volatile bool motion = false; */
+volatile bool motion = false; 
 
 int main(void){
+  sei();
   Serial.begin(9600);
   initLED();
   Serial.println("began initializing PIR");
@@ -23,7 +24,7 @@ int main(void){
   initTimer1();
 
 
-
+/*
   while(1){
     //testing PIR detector
     bool motion = detectMotion();
@@ -38,27 +39,27 @@ int main(void){
     delayMs(500);
   }
 
-   /* 
+   */
 
     while(1) {
        bool motion = detectMotion();
        Serial.println(motion);
        Serial.flush();
         switch(state) {
-          case: waitPress:
+          case waitPress:
           delayMs(250);
           break;
 
-          case: debouncePress:
+          case debouncePress:
           
           delayMs(250);
           break;
 
-          case: waitRelease:
+          case waitRelease:
           delayMs(200);
           break;
 
-          case: debounceRelease:
+          case debounceRelease:
           delayMs(200);
           break;
 
@@ -67,14 +68,17 @@ int main(void){
           break;
         }
     }
-   
-   ISR(PCINT0_vect) {
+
+ 
+}
+
+ ISR(PCINT0_vect){
        switch(state) {
-          case: waitPress:
+          case waitPress:
           state = debouncePress;
           break;
 
-          case: debouncePress:
+          case debouncePress:
           deviceOn = !deviceOn;
               if(deviceOn) {
                 if(motion){
@@ -86,11 +90,11 @@ int main(void){
           state = waitRelease;
           break;
 
-          case: waitRelease:
+          case waitRelease:
           state = debounceRelease;
           break;
 
-          case: debounceRelease:
+          case debounceRelease:
           state = waitPress;
           break;
 
@@ -98,7 +102,4 @@ int main(void){
           state = waitRelease;
           break;
         }
-   }
-   */
-  
-}
+   }   
