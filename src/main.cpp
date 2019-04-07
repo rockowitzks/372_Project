@@ -13,6 +13,7 @@
 volatile states state = waitPress;
 volatile bool deviceOn = true;
 volatile bool motionB = false; 
+volatile bool tooFar = false;
 
 int main(void){
   sei();
@@ -64,16 +65,16 @@ int main(void){
       int z = getZ();
       motionB = detectMotion();
       
-      bool tooFar = (abs(z) > thresh);
-      while(tooFar){ // took out motion here, but will need later
+      tooFar = (abs(z) > thresh);
+      while(tooFar && deviceOn){ // took out motion here, but will need later
         lightLED();
         delayMs(100);
       }
-      else{
-        turnOffLED();
-      }
+  
+      turnOffLED();
+      
 
-      delayMs(500);
+      delayMs(100);
         
     } 
 }
