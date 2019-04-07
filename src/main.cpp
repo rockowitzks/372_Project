@@ -10,7 +10,7 @@
 } states;
 volatile states state = waitPress;
 volatile bool deviceOn = true;
-volatile bool motion = false; 
+volatile bool motionB = false; 
 
 int main(void){
   sei();
@@ -42,10 +42,10 @@ int main(void){
 
     while(1) {
       // may not need the next 3 lines
-       motion = detectMotion();
-       Serial.println(motion);
+       motionB = detectMotion();
+       Serial.println(motionB);
        Serial.flush();
-       
+
         switch(state) {
           case waitPress:
           delayMs(250);
@@ -71,8 +71,8 @@ int main(void){
 }
 
  ISR(PCINT0_vect){
-       motion = detectMotion();
-       Serial.println(motion);
+       motionB = detectMotion();
+       Serial.println(motionB);
        Serial.flush();
        switch(state) {
           case waitPress:
@@ -83,7 +83,7 @@ int main(void){
           deviceOn = !deviceOn;
               if(deviceOn) {
                 // operate normally
-                if(motion){
+                if(motionB){
                 lightLED();
             } else {
                 turnOffLED();
