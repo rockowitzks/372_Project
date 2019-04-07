@@ -13,3 +13,11 @@ void lightLED(){
 void turnOffLED(){
     PORTA &= ~(1 << PORTA1);
 }
+
+void toggleLED(bool motion, bool deviceOn) {
+    if((deviceOn && !motion) || (!deviceOn)) {
+        turnOffLED();
+    } else { // (deviceOn && motion)
+        lightLED();
+    }
+}

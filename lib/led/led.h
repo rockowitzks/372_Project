@@ -6,5 +6,6 @@
 void initLED();
 void lightLED();
 void turnOffLED();
+void toggleLED(bool motion, bool deviceOn);
 
 #endif

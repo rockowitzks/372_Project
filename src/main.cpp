@@ -40,6 +40,8 @@ int main(void){
   }
    */
 
+
+
     while(1) {
       // may not need the next 3 lines
        motionB = detectMotion();
@@ -67,6 +69,14 @@ int main(void){
           delayMs(250);
           break;
         }
+        /* unsigned int BuzzerNumber = buzzerNumberCalculation; 
+           motionB = detectMotion();
+           Serial.println(motionB);
+           Serial.flush();
+           ChangeDutyCycle(BuzzerNumber, deviceOn);
+           ToggleLED(motion, deviceOn);
+        */
+        
     } 
 }
 
@@ -81,22 +91,6 @@ int main(void){
 
           case debouncePress:
           deviceOn = !deviceOn;
-              if(deviceOn) {
-                // operate normally
-                if(motionB){
-                lightLED();
-            } else {
-                turnOffLED();
-              }
-              // buzzer activation
-              /* 
-              changeDutyCylce(5, true);
-              */
-          } else {
-            // turn everything off
-            turnOffLED();
-            //changeDutyCycle(0, false);
-          }
           state = waitRelease;
           break;
 
