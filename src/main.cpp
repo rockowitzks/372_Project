@@ -41,7 +41,8 @@ int main(void){
    */
 
     while(1) {
-       bool motion = detectMotion();
+      // may not need the next 3 lines
+       motion = detectMotion();
        Serial.println(motion);
        Serial.flush();
         switch(state) {
@@ -66,12 +67,13 @@ int main(void){
           delayMs(250);
           break;
         }
-    }
-
- 
+    } 
 }
 
  ISR(PCINT0_vect){
+       motion = detectMotion();
+       Serial.println(motion);
+       Serial.flush();
        switch(state) {
           case waitPress:
           state = debouncePress;
