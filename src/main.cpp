@@ -10,7 +10,7 @@
 } states;
 volatile states state = waitPress;
 volatile bool deviceOn = true;
-volatile bool motion = false; 
+volatile bool motionB = false; 
 
 int main(void){
   sei();
@@ -22,30 +22,12 @@ int main(void){
   Serial.println("finished initializing PIR");
   Serial.flush();
   initTimer1();
-
-
-/*
-  while(1){
-    //testing PIR detector
-    bool motion = detectMotion();
-    Serial.println(motion);
-    if(motion){
-      lightLED();
-    }
-    else{
-      turnOffLED();
-    }
-
-    delayMs(500);
-  }
-   */
-
     while(1) {
       // may not need the next 3 lines
-       motion = detectMotion();
-       Serial.println(motion);
+       motionB = detectMotion();
+       Serial.println(motionB);
        Serial.flush();
-       
+
         switch(state) {
           case waitPress:
           delayMs(250);
@@ -67,12 +49,21 @@ int main(void){
           delayMs(250);
           break;
         }
+        /* unsigned int BuzzerNumber = buzzerNumberCalculation; // need this
+           motionB = detectMotion();
+           Serial.println(motionB);
+           Serial.flush();
+           ChangeDutyCycle(BuzzerNumber, motion, deviceOn);
+           ToggleLED(motion, deviceOn);
+           accelerometer thingy. // need this
+        */
+        
     } 
 }
 
  ISR(PCINT0_vect){
-       motion = detectMotion();
-       Serial.println(motion);
+       motionB = detectMotion();
+       Serial.println(motionB);
        Serial.flush();
        switch(state) {
           case waitPress:
@@ -81,17 +72,6 @@ int main(void){
 
           case debouncePress:
           deviceOn = !deviceOn;
-              if(deviceOn) {
-                // operate normally
-                if(motion){
-                lightLED();
-            } else {
-                turnOffLED();
-              }
-          } else {
-            // turn everything off
-            turnOffLED();
-          }
           state = waitRelease;
           break;
 
