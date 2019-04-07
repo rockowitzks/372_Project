@@ -61,7 +61,6 @@ int main(void){
            ToggleLED(motion, deviceOn);
         */
        //testing PIR detector
-      //bool motion = detectMotion();
       int z = getZ();
       motionB = detectMotion();
       
