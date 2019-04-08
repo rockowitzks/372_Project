@@ -62,10 +62,10 @@ void initPWMTimer3(){
     OCR3A = 1023; //1024
 }
 
-void triggerAlarm(bool deviceOn){
+void triggerAlarm(volatile bool *deviceOn){
 // change the duty cycle
     // decide which motor needs to change, change the duty cycle
-    while(deviceOn){
+    while(*deviceOn){
         //Play first section
       firstSection();
     

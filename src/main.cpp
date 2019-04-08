@@ -1,9 +1,11 @@
 
 #include <Arduino.h>
-#include "adxl345.h"
 #include "led.h"
 #include "timer.h"
+#include "adxl345.h"
 #include "pir.h"
+#include "pwm.h"
+#include "switch.h"
 
 #define thresh 300
 
@@ -18,19 +20,16 @@ volatile bool tooFar = false;
 int main(void){
   sei();
   Serial.begin(9600);
-
-
   initLED(); //for testing
   initPIR(); //motion sensor
   initTimer1(); //for testing
   initADXL345(); //accelerometer
+  initPWMTimer3(); // PWM
+  initSwitchPB1(); // switch
 
 
 
   while(1) {
-    // may not need the next 3 lines
-    
-
     switch(state) {
       case waitPress:
       delayMs(250);
@@ -52,27 +51,15 @@ int main(void){
       delayMs(250);
       break;
     }
-        
-        /* unsigned int BuzzerNumber = buzzerNumberCalculation; 
-           motionB = detectMotion();
-           Serial.println(motionB);
-           Serial.flush();
-           ChangeDutyCycle(BuzzerNumber, deviceOn);
-           ToggleLED(motion, deviceOn);
-        */
        //testing PIR detector
       int z = getZ();
-      motionB = detectMotion();
-      
+      motionB = detectMotion();  
       tooFar = (abs(z) > thresh);
-      while(tooFar && deviceOn){ // took out motion here, but will need later
+      while((tooFar && deviceOn) || (deviceOn && motionB))  { 
         lightLED();
-        delayMs(100);
+        triggerAlarm(&deviceOn); 
       }
-  
       turnOffLED();
-      
-
       delayMs(100);
         
     } 
