@@ -4,6 +4,8 @@
 #include "led.h"
 #include "timer.h"
 #include "pir.h"
+#include "pwm.h"
+#include "switch.h"
 
 #define thresh 300
 
@@ -24,7 +26,8 @@ int main(void){
   initPIR(); //motion sensor
   initTimer1(); //for testing
   initADXL345(); //accelerometer
-
+  initPWMTimer3();
+  initSwitchPB1();
 
 
   while(1) {
@@ -60,7 +63,7 @@ int main(void){
            ChangeDutyCycle(BuzzerNumber, deviceOn);
            ToggleLED(motion, deviceOn);
         */
-       //testing PIR detector
+      //testing PIR detector
       int z = getZ();
       motionB = detectMotion();
       
