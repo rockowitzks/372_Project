@@ -5,9 +5,9 @@
 #define PWM_H
 
 void initPWMTimer3();
-void triggerAlarm(bool* deviceOn);
-void firstSection();
-void secondSection();
-void beep(int note, unsigned int duration);
+void triggerAlarm(volatile bool* deviceOn);
+void firstSection(volatile bool *deviceOn);
+void secondSection(volatile bool *deviceOn);
+void beep(int note, unsigned int duration, volatile bool on);
 
 #endif

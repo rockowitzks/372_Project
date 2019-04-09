@@ -16,6 +16,7 @@ volatile states state = waitPress;
 volatile bool deviceOn = true;
 volatile bool motionB = false; 
 volatile bool tooFar = false;
+//volatile bool alarmOn = false;
 
 int main(void){
   sei();
@@ -32,45 +33,47 @@ int main(void){
 
   while(1) {
     // may not need the next 3 lines
-    
+    tooFar = false;
+    motionB = false;
 
     switch(state) {
       case waitPress:
-      delayMs(250);
+      Serial.println("wait press");
+      //delayMs(250);
       break;
 
       case debouncePress:
+      Serial.println("debounce press");
       delayMs(250);
+      state = waitRelease;
       break;
 
       case waitRelease:
-      delayMs(200);
+      //delayMs(200);
+      Serial.println("wait relaes");
       break;
-
+      //more comments
       case debounceRelease:
+      Serial.println("debounce relaes");
       delayMs(200);
+      state = waitPress;
       break;
 
       default:
       delayMs(250);
+      state = waitPress;
       break;
     }
-        
-        /* unsigned int BuzzerNumber = buzzerNumberCalculation; 
-           motionB = detectMotion();
-           Serial.println(motionB);
-           Serial.flush();
-           ChangeDutyCycle(BuzzerNumber, deviceOn);
-           ToggleLED(motion, deviceOn);
-        */
+      
       //testing PIR detector
       int z = getZ();
       motionB = detectMotion();
       
       tooFar = (abs(z) > thresh);
-      while(tooFar && deviceOn){ // took out motion here, but will need later
+      while(deviceOn && (tooFar || motionB)){ // took out motion here, but will need later
         lightLED();
-        delayMs(100);
+        triggerAlarm(&deviceOn);
+        //delayMs(100);
       }
   
       turnOffLED();
@@ -87,21 +90,9 @@ int main(void){
           state = debouncePress;
           break;
 
-          case debouncePress:
-          deviceOn = !deviceOn;
-          state = waitRelease;
-          break;
-
           case waitRelease:
+          deviceOn = !deviceOn;
           state = debounceRelease;
-          break;
-
-          case debounceRelease:
-          state = waitPress;
-          break;
-
-          default:
-          state = waitRelease;
           break;
         }
    }   
