@@ -23,7 +23,7 @@ void initPWMTimer3(){
     OCR3A = 0; //1024
 }
 
-void triggerAlarm(bool* deviceOn){
+void triggerAlarm(volatile bool* deviceOn){
 // change the duty cycle
     // decide which motor needs to change, change the duty cycle
     
@@ -31,7 +31,6 @@ void triggerAlarm(bool* deviceOn){
       Serial.println("1trigger Device on :");
       Serial.println(*deviceOn);
         //Play first section
-<<<<<<< HEAD
       firstSection(deviceOn);
       Serial.println("2trigger Device on :");
       Serial.println(*deviceOn);
@@ -73,46 +72,17 @@ void triggerAlarm(bool* deviceOn){
       if (*deviceOn)
         delayMs(650);
     
-=======
-      firstSection();
-    
-      //Play second section
-      secondSection();
-    
-      //Variant 1
-      beep(f, 250);  
-      beep(gS, 500);  
-      beep(f, 350);  
-      beep(a, 125);
-      beep(cH, 500);
-      beep(a, 375);  
-      beep(cH, 125);
-      beep(eH, 650);
-    
-      delayMs(500);
-      
-      //Repeat second section
-      secondSection();
-    
-      //Variant 2 
-      beep(f, 250);  
-      beep(gS, 500);  
-      beep(f, 375);  
-      beep(cH, 125);
-      beep(a, 500);  
-      beep(f, 375);  
-      beep(cH, 125);
-      beep(a, 650);  
-    
-      delayMs(650);
-    }
->>>>>>> parent of 8282886... making moves
+
     OCR3A = 0;
 }
 
-void beep(int note, unsigned int duration)
+void beep(int note, unsigned int duration, volatile bool on)
 {
   //Play tone on buzzerPin
+  
+  if (!on) 
+    return;
+  Serial.println("beeper");
   DDRE |= (1 << DDE3);
   OCR3A = note;
   delayMs(duration);
@@ -122,54 +92,64 @@ void beep(int note, unsigned int duration)
   delayMs(50);
 }
 
-void firstSection()
+void firstSection(volatile bool *deviceOn)
 {
-  beep(a, 500);
-  beep(a, 500);    
-  beep(a, 500);
-  beep(f, 350);
-  beep(cH, 150);  
-  beep(a, 500);
-  beep(f, 350);
-  beep(cH, 150);
-  beep(a, 650);
+  beep(a, 500, *deviceOn);
+  beep(a, 500, *deviceOn);    
+  beep(a, 500, *deviceOn);
+  beep(f, 350, *deviceOn);
+  beep(cH, 150, *deviceOn);  
+  beep(a, 500, *deviceOn);
+  beep(f, 350, *deviceOn);
+  beep(cH, 150, *deviceOn);
+  beep(a, 650, *deviceOn);
  
-  delayMs(500);
+  if (*deviceOn)
+    delayMs(500);
+  else 
+    return;
+
+  beep(eH, 500, *deviceOn);
+  beep(eH, 500, *deviceOn);
+  beep(eH, 500, *deviceOn);  
+  beep(fH, 350, *deviceOn);
+  beep(cH, 150, *deviceOn);
+  beep(gS, 500, *deviceOn);
+  beep(f, 350, *deviceOn);
+  beep(cH, 150, *deviceOn);
+  beep(a, 650, *deviceOn);
  
-  beep(eH, 500);
-  beep(eH, 500);
-  beep(eH, 500);  
-  beep(fH, 350);
-  beep(cH, 150);
-  beep(gS, 500);
-  beep(f, 350);
-  beep(cH, 150);
-  beep(a, 650);
- 
-  delayMs(500);
+  if (*deviceOn) {
+    delayMs(500);
+  }
 }
  
-void secondSection()
+void secondSection(volatile bool *deviceOn)
 {
-  beep(aH, 500);
-  beep(a, 300);
-  beep(a, 150);
-  beep(aH, 500);
-  beep(gSH, 325);
-  beep(gH, 175);
-  beep(fSH, 125);
-  beep(fH, 125);    
-  beep(fSH, 250);
- 
-  delayMs(325);
- 
-  beep(aS, 250);
-  beep(dSH, 500);
-  beep(dH, 325);  
-  beep(cSH, 175);  
-  beep(cH, 125);  
-  beep(b, 125);  
-  beep(cH, 250);  
- 
-  delayMs(350);
+  beep(aH, 500, *deviceOn);
+  beep(a, 300, *deviceOn);
+  beep(a, 150, *deviceOn);
+  beep(aH, 500, *deviceOn);
+  beep(gSH, 325, *deviceOn);
+  beep(gH, 175, *deviceOn);
+  beep(fSH, 125, *deviceOn);
+  beep(fH, 125, *deviceOn);    
+  beep(fSH, 250, *deviceOn);
+  
+  if (*deviceOn) {
+    delayMs(325);
+  }
+  else 
+    return;
+
+  beep(aS, 250, *deviceOn);
+  beep(dSH, 500, *deviceOn);
+  beep(dH, 325, *deviceOn);  
+  beep(cSH, 175, *deviceOn);  
+  beep(cH, 125, *deviceOn);  
+  beep(b, 125, *deviceOn);  
+  beep(cH, 250, *deviceOn);  
+  
+  if (*deviceOn)
+    delayMs(350);
 }

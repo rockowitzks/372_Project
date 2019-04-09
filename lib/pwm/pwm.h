@@ -48,16 +48,10 @@ const int aH_FREQ = 880;
 #define aH (F_CPU / (aH_FREQ * TIMER1_PRESCALER * 2) - 1)
 
 void initPWMTimer3();
-<<<<<<< HEAD
 void triggerAlarm(volatile bool* deviceOn);
 void firstSection(volatile bool* deviceOn);
 void secondSection(volatile bool* deviceOn);
 void beep(int note, unsigned int duration, volatile bool on);
-=======
-void triggerAlarm(bool* deviceOn);
-void firstSection();
-void secondSection();
-void beep(int note, unsigned int duration);
->>>>>>> parent of 8282886... making moves
+
 
 #endif

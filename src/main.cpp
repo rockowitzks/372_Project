@@ -14,7 +14,7 @@
   waitPress, debouncePress, waitRelease, debounceRelease
 } stateType;
 volatile stateType state = waitPress;
-volatile bool deviceOn = true;
+volatile bool deviceOn = false;
 //volatile bool& deviceOnRef = deviceOn;
 //volatile bool* deviceOnPtr = &deviceOn;
 volatile bool motionB = false; 
@@ -34,7 +34,6 @@ int main(void){
 
 
   while(1) {
-<<<<<<< HEAD
     tooFar = false;
     motionB = false;
 
@@ -47,26 +46,12 @@ int main(void){
       Serial.println("debounce press");
       delayMs(10);
       state = waitRelease;
-=======
-    // may not need the next 3 lines
-    
-
-    switch(state) {
-      case waitPress:
-      delayMs(250);
-      break;
-
-      case debouncePress:
-      delayMs(250);
->>>>>>> parent of 8282886... making moves
       break;
 
       case waitRelease:
-      delayMs(200);
       break;
 
       case debounceRelease:
-<<<<<<< HEAD
       Serial.println("debounce relaes");
       delayMs(10);
       state = waitPress;
@@ -76,7 +61,7 @@ int main(void){
 
       
       //bool to check if the device has been moved past the thresh value
-      tooFar = (abs(getZ()) > thresh);
+      //tooFar = (abs(getZ()) > thresh);
       //uses PIR sensor to check if any motion
       //motionB = detectMotion();
       
@@ -88,38 +73,13 @@ int main(void){
       Serial.println(tooFar);
       Serial.flush();
 
-      if(deviceOn /*&& (tooFar || motionB)*/){ // took out motion here, but will need later
+      if(deviceOn /* && (tooFar) || motionB)*/){ // took out motion here, but will need later
         lightLED();
         triggerAlarm(&deviceOn);
         
       }
       else{
         turnOffLED();
-=======
-      delayMs(200);
-      break;
-
-      default:
-      delayMs(250);
-      break;
-    }
-        
-        /* unsigned int BuzzerNumber = buzzerNumberCalculation; 
-           motionB = detectMotion();
-           Serial.println(motionB);
-           Serial.flush();
-           ChangeDutyCycle(BuzzerNumber, deviceOn);
-           ToggleLED(motion, deviceOn);
-        */
-      //testing PIR detector
-      int z = getZ();
-      motionB = detectMotion();
-      
-      tooFar = (abs(z) > thresh);
-      while(tooFar && deviceOn){ // took out motion here, but will need later
-        lightLED();
-        delayMs(100);
->>>>>>> parent of 8282886... making moves
       }
 
       //delayMs(100);
@@ -128,7 +88,6 @@ int main(void){
 }
 
  ISR(PCINT0_vect){
-<<<<<<< HEAD
   if(state == waitPress){
     Serial.println("ISR pressed");
     state = debouncePress;
@@ -139,31 +98,3 @@ int main(void){
     state = debounceRelease;
   }
 }   
-=======
-       switch(state) {
-          case waitPress:
-          state = debouncePress;
-          break;
-
-          case debouncePress:
-          deviceOn = !deviceOn;
-          state = waitRelease;
-          break;
-
-          case waitRelease:
-          state = debounceRelease;
-          break;
-
-          case debounceRelease:
-          state = waitPress;
-          break;
-
-          default:
-          state = waitRelease;
-          break;
-        }
-   }   
->>>>>>> parent of 8282886... making moves
-
-
-
