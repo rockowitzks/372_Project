@@ -1,6 +1,6 @@
 // PB1 Switch
 #include "switch.h"
-#include <avr/io.h>
+
 
 void initSwitchPB1(){
   DDRB &= ~(1 << DDB1); // Initializes pull-up resistor on PB1 and sets it into input mode
