@@ -67,7 +67,7 @@ int getZ(){
     requestFrom(accel_module, 1);
     z += (read()<<8);
     endTransmission();
-    Serial.print("\tZ = ");
+    Serial.print("Z = ");
     Serial.println(z+3);
     Serial.flush();
     return z + 3;

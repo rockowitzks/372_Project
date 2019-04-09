@@ -59,7 +59,7 @@ void initPWMTimer3(){
     TCCR3A = (1 << COM3A0);
     TCCR3B = (1 << WGM32)|(1 << CS30);
 
-    OCR3A = 1023; //1024
+    OCR3A = 0; //1024
 }
 
 void triggerAlarm(volatile bool* deviceOn){

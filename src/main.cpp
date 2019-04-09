@@ -6,6 +6,7 @@
 #include "pir.h"
 #include "pwm.h"
 #include "switch.h"
+#include "math.h"
 
 #define thresh 300
 
@@ -32,19 +33,18 @@ int main(void){
 
 
   while(1) {
-    // may not need the next 3 lines
     tooFar = false;
     motionB = false;
 
     switch(state) {
       case waitPress:
       Serial.println("wait press");
-      //delayMs(250);
       break;
 
       case debouncePress:
       Serial.println("debounce press");
       delayMs(250);
+      Serial.println("debounce press left");
       state = waitRelease;
       break;
 
@@ -59,18 +59,25 @@ int main(void){
       state = waitPress;
       break;
 
-      default:
-      delayMs(250);
-      state = waitPress;
-      break;
     }
+
       
-      //testing PIR detector
-      int z = getZ();
-      motionB = detectMotion();
+      //bool to check if the device has been moved past the thresh value
+      tooFar = (abs(getZ()) > thresh);
+      //uses PIR sensor to check if any motion
+      //motionB = detectMotion();
       
-      tooFar = (abs(z) > thresh);
-      while(deviceOn && (tooFar || motionB)){ // took out motion here, but will need later
+      Serial.print("Device on: \t");
+      Serial.println(deviceOn);
+      // Serial.print("Motion: \t");
+      // Serial.println(motionB);
+      Serial.print("isMoved: \t");
+      Serial.println(tooFar);
+      Serial.flush();
+
+      while(deviceOn && (tooFar /*|| motionB*/)){ // took out motion here, but will need later
+        Serial.println("entered checks");
+        Serial.flush();
         lightLED();
         triggerAlarm(&deviceOn);
         //delayMs(100);
@@ -85,17 +92,14 @@ int main(void){
 }
 
  ISR(PCINT0_vect){
-       switch(state) {
-          case waitPress:
-          state = debouncePress;
-          break;
-
-          case waitRelease:
-          deviceOn = !deviceOn;
-          state = debounceRelease;
-          break;
-        }
-   }   
+  if(state == waitPress){
+    state = debouncePress;
+  }
+  else if (state == waitRelease){
+    deviceOn = !deviceOn;
+    state = debounceRelease;
+  }
+}   
 
 
 
