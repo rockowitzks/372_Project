@@ -10,11 +10,13 @@
 
 #define thresh 300
 
- typedef enum {
+ typedef enum stateType_enum{
   waitPress, debouncePress, waitRelease, debounceRelease
-} states;
-volatile states state = waitPress;
+} stateType;
+volatile stateType state = waitPress;
 volatile bool deviceOn = true;
+//volatile bool& deviceOnRef = deviceOn;
+//volatile bool* deviceOnPtr = &deviceOn;
 volatile bool motionB = false; 
 volatile bool tooFar = false;
 //volatile bool alarmOn = false;
@@ -43,8 +45,7 @@ int main(void){
 
       case debouncePress:
       Serial.println("debounce press");
-      delayMs(250);
-      Serial.println("debounce press left");
+      delayMs(10);
       state = waitRelease;
       break;
 
@@ -55,7 +56,7 @@ int main(void){
       //more comments
       case debounceRelease:
       Serial.println("debounce relaes");
-      delayMs(200);
+      delayMs(10);
       state = waitPress;
       break;
 
@@ -75,28 +76,28 @@ int main(void){
       Serial.println(tooFar);
       Serial.flush();
 
-      while(deviceOn && (tooFar /*|| motionB*/)){ // took out motion here, but will need later
-        Serial.println("entered checks");
-        Serial.flush();
+      if(deviceOn /*&& (tooFar || motionB)*/){ // took out motion here, but will need later
         lightLED();
         triggerAlarm(&deviceOn);
-        //delayMs(100);
+        
       }
-  
-      turnOffLED();
-      
+      else{
+        turnOffLED();
+      }
 
-      delayMs(100);
+      //delayMs(100);
         
     } 
 }
 
  ISR(PCINT0_vect){
   if(state == waitPress){
+    Serial.println("ISR pressed");
     state = debouncePress;
   }
   else if (state == waitRelease){
-    deviceOn = !deviceOn;
+    Serial.println("ISR relaesed");
+    deviceOn = !(deviceOn);
     state = debounceRelease;
   }
 }   
