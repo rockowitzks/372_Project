@@ -68,7 +68,7 @@ int main(void){
       }
       
       turnOffLED();
-      delayMs(100);
+      delayMs(500);
         
     } 
 }
