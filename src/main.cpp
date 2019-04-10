@@ -10,91 +10,79 @@
 
 #define thresh 300
 
- typedef enum stateType_enum{
+typedef enum stateType_enum{
   waitPress, debouncePress, waitRelease, debounceRelease
 } stateType;
 volatile stateType state = waitPress;
 volatile bool deviceOn = false;
-//volatile bool& deviceOnRef = deviceOn;
-//volatile bool* deviceOnPtr = &deviceOn;
-volatile bool motionB = false; 
-volatile bool tooFar = false;
 
 int main(void){
   sei();
   Serial.begin(9600);
-
+  
+  //checks for tripping the alarm
+  bool motionB = false; 
+  bool tooFar = false;
 
   initLED(); //for testing
-  initPIR(); //motion sensor
+  //initPIR(); //motion sensor
   initTimer1(); //for testing
   initADXL345(); //accelerometer
-  initPWMTimer3();
+  //initPWMTimer3();
   initSwitchPB1();
 
 
   while(1) {
-    tooFar = false;
-    motionB = false;
 
-    switch(state) {
+    switch(state){
       case waitPress:
-      Serial.println("wait press");
-      break;
-
+        break;
       case debouncePress:
-      Serial.println("debounce press");
-      delayMs(10);
-      state = waitRelease;
-      break;
-
+        delayMs(100);
+        state = waitRelease;
+        break;
       case waitRelease:
-      break;
-
+        break;
       case debounceRelease:
-      Serial.println("debounce relaes");
-      delayMs(10);
-      state = waitPress;
-      break;
-
+        delayMs(100);
+        state = waitPress;
+        break;
     }
-
-      
       //bool to check if the device has been moved past the thresh value
-      //tooFar = (abs(getZ()) > thresh);
+      tooFar = (abs(getZ()) > thresh);
+
       //uses PIR sensor to check if any motion
       //motionB = detectMotion();
       
-      Serial.print("Device on: \t");
+      Serial.print("Device on?: \t");
       Serial.println(deviceOn);
       // Serial.print("Motion: \t");
       // Serial.println(motionB);
       Serial.print("isMoved: \t");
       Serial.println(tooFar);
-      Serial.flush();
-
-      if(deviceOn /* && (tooFar) || motionB)*/){ // took out motion here, but will need later
+  
+      while(deviceOn && (tooFar) /*|| motionB)*/){ // took out motion here, but will need later
         lightLED();
-        triggerAlarm(&deviceOn);
+       // triggerAlarm(&deviceOn);
         
       }
-      else{
-        turnOffLED();
-      }
+      
+      turnOffLED();
+      
 
-      //delayMs(100);
+      delayMs(100);
         
     } 
 }
 
  ISR(PCINT0_vect){
   if(state == waitPress){
-    Serial.println("ISR pressed");
+    //Serial.println("ISR pressed");
     state = debouncePress;
   }
   else if (state == waitRelease){
-    Serial.println("ISR relaesed");
-    deviceOn = !(deviceOn);
+    //Serial.println("ISR relaesed");
+    deviceOn = !deviceOn;
     state = debounceRelease;
-  }
+  }  
 }   

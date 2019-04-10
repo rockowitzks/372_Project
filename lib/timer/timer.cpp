@@ -9,10 +9,10 @@ void initTimer1(){
     TCCR1B &= ~(1 << WGM13);
 
     //sets prescaler to 8
-    TCCR1B |= (1 << CS11);
+    TCCR1B |= (1 << CS11) | (1<<CS10);
 
     //for millisecond timer
-    OCR1A = 2000;
+    OCR1A = 250;
 }
 
 void delayMs(unsigned int delay){
