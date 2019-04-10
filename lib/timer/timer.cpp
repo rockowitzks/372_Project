@@ -8,7 +8,7 @@ void initTimer1(){
     TCCR1B |= (1 << WGM12);
     TCCR1B &= ~(1 << WGM13);
 
-    //sets prescaler to 8
+    //sets prescaler to 64
     TCCR1B |= (1 << CS11) | (1<<CS10);
 
     //for millisecond timer
