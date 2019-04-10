@@ -28,16 +28,13 @@ void triggerAlarm(volatile bool* deviceOn){
     // decide which motor needs to change, change the duty cycle
     
     //while(*deviceOn){
-      Serial.println("1trigger Device on :");
-      Serial.println(*deviceOn);
+   
         //Play first section
       firstSection(deviceOn);
-      Serial.println("2trigger Device on :");
-      Serial.println(*deviceOn);
+      
       //Play second section
       secondSection(deviceOn);
-      Serial.println("3trigger Device on :");
-      Serial.println(*deviceOn);
+      
       //Variant 1
       beep(f, 250, *deviceOn);  
       beep(gS, 500, *deviceOn);  
@@ -47,8 +44,7 @@ void triggerAlarm(volatile bool* deviceOn){
       beep(a, 375, *deviceOn);  
       beep(cH, 125, *deviceOn);
       beep(eH, 650, *deviceOn);
-      Serial.println("4trigger Device on :");
-      Serial.println(*deviceOn);
+      
       if (*deviceOn) {
         delayMs(500);
       }
@@ -57,8 +53,7 @@ void triggerAlarm(volatile bool* deviceOn){
       }
       //Repeat second section
       secondSection(deviceOn);
-      Serial.println("5trigger Device on :");
-      Serial.println(*deviceOn);
+      
       //Variant 2 
       beep(f, 250, *deviceOn);  
       beep(gS, 500, *deviceOn);  
@@ -82,7 +77,7 @@ void beep(int note, unsigned int duration, volatile bool on)
   
   if (!on) 
     return;
-  Serial.println("beeper");
+  
   DDRE |= (1 << DDE3);
   OCR3A = note;
   delayMs(duration);
