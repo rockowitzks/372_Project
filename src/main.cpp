@@ -25,10 +25,10 @@ int main(void){
   bool tooFar = false;
 
   initLED(); //for testing
-  //initPIR(); //motion sensor
+  initPIR(); //motion sensor
   initTimer1(); //for testing
   initADXL345(); //accelerometer
-  //initPWMTimer3();
+  initPWMTimer3();
   initSwitchPB1();
 
 
@@ -52,24 +52,22 @@ int main(void){
       tooFar = (abs(getZ()) > thresh);
 
       //uses PIR sensor to check if any motion
-      //motionB = detectMotion();
+      motionB = detectMotion();
       
       Serial.print("Device on?: \t");
       Serial.println(deviceOn);
-      // Serial.print("Motion: \t");
-      // Serial.println(motionB);
+      Serial.print("Motion: \t");
+      Serial.println(motionB);
       Serial.print("isMoved: \t");
       Serial.println(tooFar);
   
-      while(deviceOn && (tooFar) /*|| motionB)*/){ // took out motion here, but will need later
+      while(deviceOn && (tooFar|| motionB) ){ // took out motion here, but will need later
         lightLED();
-       // triggerAlarm(&deviceOn);
+        triggerAlarm(&deviceOn);
         
       }
       
       turnOffLED();
-      
-
       delayMs(100);
         
     } 
