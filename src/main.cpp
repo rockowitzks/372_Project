@@ -24,9 +24,13 @@ int main(void){
   bool motionB = false; 
   bool tooFar = false;
 
+  bool prevMotion = false;
+  bool prevTooFar = false;
+  initTimer1(); //for testing
   initLED(); //for testing
   initPIR(); //motion sensor
-  initTimer1(); //for testing
+  delayMs(60000); //PIR takes a minute to warm up
+  
   initADXL345(); //accelerometer
   initPWMTimer3();
   initSwitchPB1();
@@ -54,20 +58,25 @@ int main(void){
       //uses PIR sensor to check if any motion
       motionB = detectMotion();
       
-      Serial.print("Device on?: \t");
-      Serial.println(deviceOn);
-      Serial.print("Motion: \t");
-      Serial.println(motionB);
-      Serial.print("isMoved: \t");
-      Serial.println(tooFar);
+      //Serial.print("Device on?: \t");
+      //Serial.println(deviceOn);
+      if (motionB != prevMotion) {
+        Serial.print("Motion: \t");
+        Serial.println(motionB);
+        prevMotion = motionB;
+      }
+      if (tooFar != prevTooFar) {
+        Serial.print("isMoved: \t");
+        Serial.println(tooFar);
+        prevTooFar = tooFar;
+      }
   
       while(deviceOn && (tooFar|| motionB) ){ // took out motion here, but will need later
         lightLED();
         triggerAlarm(&deviceOn);
-        
       }
       
-      //turnOffLED();
+      turnOffLED();
       delayMs(100);
         
     } 
@@ -75,11 +84,10 @@ int main(void){
 
  ISR(PCINT0_vect){
   if(state == waitPress){
-    //Serial.println("ISR pressed");
+
     state = debouncePress;
   }
   else if (state == waitRelease){
-    //Serial.println("ISR relaesed");
     deviceOn = !deviceOn;
     state = debounceRelease;
   }  
